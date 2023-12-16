@@ -15,7 +15,8 @@
 <!-- Provide a detailed description of the application design. What technologies (languages, libraries, etc) you're using, and any other relevant design information. -->
 
 ## Change Log
-<!-- Name of feature: Server Repo set up
+
+Name of feature: Server Repo set up
 
 Estimate of time needed to complete: 20 mn
 
@@ -33,8 +34,7 @@ Start time: 12:10
 Stop time:12:30
 Finish time:
 
-Actual time needed to complete:
+12-15-2023 9:02pm - Application can fetch placeholder data.
 
-01-01-2001 4:59pm - Application now has a fully-functional express server, with a GET route for the location resource. -->
 
 ## Credit and Collaborations
