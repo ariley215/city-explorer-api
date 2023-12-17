@@ -1,8 +1,11 @@
 require('dotenv').config();
 const express = require('express');
-const weatherData = require('./data/weather.json');
 const app = express();
+const cors = require('cors');
 const PORT = process.env.PORT || 3000;
+const axios = require('axios');
+
+app.use(cors());
 
 class Forecast {
   constructor(eachWeatherDay) {
@@ -11,28 +14,60 @@ class Forecast {
   }
 }
 
-app.get('/weather', (request, response) => {
+class Movie {
+  constructor(eachMovie) {
+    this.title = eachMovie.title;
+    this.overview = eachMovie.overview;
+    this.aveVotes = eachMovie.vote_average;
+    this.totalVotes = eachMovie.vote_count;
+    this.image = eachMovie.poster_path;
+    this.popular = eachMovie.popularity;
+    this.releaseDate = eachMovie.release_date;
+  }
+}
+
+app.get('/movies', async (request, response) => {
+  const searchQuery = request.query.searchQuery;
+
+  const apiMovieUrl = `https://api.themoviedb.org/3/search/movie?query=${searchQuery}&api_key=${process.env.MOVIE_API_KEY}`;
+
+  try {
+    const apiMovieResponse = await axios.get(apiMovieUrl);
+    const movieDataArray = apiMovieResponse.data.results.map(eachMovie => new Movie(eachMovie));
+    response.status(200).send(movieDataArray);
+  } catch(error) {
+    console.error('error fetching movies', error);
+  }
+});
+
+app.get('/weather', async (request, response) => {
 
   const { lat, lon, searchQuery } = request.query;
   if (!lat || !lon || !searchQuery) {
     response.status(400).json({});
+    return;
   }
+  try {
+    const apiWeatherUrl = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&searchQuery=${searchQuery}&key=${process.env.WEATHER_API_KEY}`;
 
-  const foundCity = weatherData.find((cityData) => {
-    return cityData.city_name === searchQuery;
-  });
-  console.log(foundCity);
-  const formattedForecast = foundCity.data.map((weatherDayData) => {
-    return new Forecast(weatherDayData);
-  });
-  console.log(formattedForecast);
+    const apiWeatherResponse = await axios.get(apiWeatherUrl);
+    const forecastData = apiWeatherResponse.data.data;
 
-  if (formattedForecast) {
-    response.json({ city: foundCity.city_name, weatherData: formattedForecast });
-  } else {
-    response.status(404).json({ error: 'City not found.' });
+    console.log(apiWeatherResponse.data, 'API Response');
+    console.log('forcast data', forecastData);
+
+    if (!forecastData || forecastData.lenth === 0) {
+      response.status(404).json({ error: 'City not found or no weather data available' });
+      return;
+    }
+    const formattedForecast = forecastData.map (eachWeatherDay => new Forecast(eachWeatherDay));
+    console.log(formattedForecast);
+
+    response.json({ city: forecastData[0].city_name, weatherData: formattedForecast });
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'Internal server error' });
   }
-
 });
 
 
