@@ -42,13 +42,13 @@ app.get('/movies', async (request, response) => {
 
 app.get('/weather', async (request, response) => {
 
-  const { lat, lon, searchQuery } = request.query;
-  if (!lat || !lon || !searchQuery) {
+  const { lon, lat, searchQuery } = request.query;
+  if (!lon || !lat || !searchQuery) {
     response.status(400).json({});
     return;
   }
   try {
-    const apiWeatherUrl = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&searchQuery=${searchQuery}&key=${process.env.WEATHER_API_KEY}`;
+    const apiWeatherUrl = `https://api.weatherbit.io/v2.0/forecast/daily?lon=${lon}&lat=${lat}&searchQuery=${searchQuery}&key=${process.env.WEATHER_API_KEY}`;
 
     const apiWeatherResponse = await axios.get(apiWeatherUrl);
     const forecastData = apiWeatherResponse.data.data;
