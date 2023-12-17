@@ -34,7 +34,8 @@ Start time: 12:10
 Stop time:12:30
 Finish time:
 
-12-15-2023 9:02pm - Application can fetch placeholder data.
-
-
+12-08-2023 9:02pmEST - Application can fetch placeholder data.
+12-15-2023 5:15pmEST - Weather API successfully connected.
+12-15-2023 6:00pmEST - API data properly formatted
+12-15-2023 7:15pmEST - Movie API successfully connected with properly formatted response data.
 ## Credit and Collaborations
