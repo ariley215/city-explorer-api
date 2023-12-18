@@ -38,4 +38,5 @@ Finish time:
 12-15-2023 5:15pmEST - Weather API successfully connected.
 12-15-2023 6:00pmEST - API data properly formatted
 12-15-2023 7:15pmEST - Movie API successfully connected with properly formatted response data.
+12-18-2023 10:12amEST - code refactored and modulerized.
 ## Credit and Collaborations
