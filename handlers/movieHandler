@@ -1,0 +1,18 @@
+const axios = require('axios');
+const Movie = require('./models/Movie');
+
+async function getMovies(searchQuery) {
+  const apiMovieUrl = `https://api.themoviedb.org/3/search/movie?query=${searchQuery}&api_key=${process.env.MOVIE_API_KEY}`;
+
+  try {
+    const apiMovieResponse = await axios.get(apiMovieUrl);
+    const movieDataArray = apiMovieResponse.data.results.map(eachMovie => new Movie(eachMovie));
+    return movieDataArray;
+  } catch (error) {
+    console.error('error fetching movies', error);
+    throw error;
+  }
+
+}
+
+module.exports = { getMovies };
